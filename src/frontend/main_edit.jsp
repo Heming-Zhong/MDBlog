@@ -1,8 +1,24 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <% 
     // just for test
-    String content = "'# Header1 Header2'"; 
-    String Title = "'Admin'";
+    request.setCharacterEncoding("utf-8"); 
+    String txtMsg = request.getParameter("save");
+    String content = "# Header1 Header2\njifiejfiefj";
+    if (txtMsg != null) {
+        content = txtMsg;
+    }
+    // encode HEX
+    // CAUTION: 
+    // Whenever you want to pass a java String to a js String, call this code
+    StringBuilder stringBuilder = new StringBuilder();
+    char[] charArray = content.toCharArray();
+    for (char c : charArray) {
+        String charToHex = "\\u" + String.format("%04X", new Integer(c));
+        stringBuilder.append(charToHex);
+    }
+
+    content = stringBuilder.toString();
+    String Title = "Admin";
 
     // TODO: complete the interaction with backend here
 %>
@@ -65,6 +81,10 @@
         <!--  vditor--fullscreen -->
         <div id="vditor" class="vditor "></div>
     </div>
+    <button onclick="save()">submit</button>
+    <form  method="post" action="main_edit.jsp" id ="passForm">  
+        <input type="hidden" id = 'save' name="save" value="">  
+    </form>  
     <script src="/dist/index.min.js">
     </script>
     
@@ -78,7 +98,7 @@
             counter: {
                 enable: true
             },
-            height: window.innerHeight,
+            height: window.innerHeight * 0.8,
             tab: '    ',
             icon: 'ant',
             outline: {
@@ -110,7 +130,7 @@
             },
             after: function() {
                 // TODO: assign the content of first doc got from java to the editor
-                var test = <%=content%>;
+                var test = "<%out.print(content);%>";
                 SetContent(test);
             }
         })
@@ -128,6 +148,13 @@
             console.log(ev.key)
         }
         
+        save = function() {
+            document.getElementById('save').value = GetContent()
+            alert(GetContent())
+            var formObj = document.getElementById('passForm'); 
+            formObj.submit(); 
+        }
+
         GetContent = function() {
             return editor.getValue()
         }

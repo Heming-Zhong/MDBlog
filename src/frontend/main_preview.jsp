@@ -1,8 +1,19 @@
 <%@ page contentType="text/html;charset=utf-8"%>
-<% 
+<%     
     // just for test
-    String content = "'# Header1 Header2'"; 
-    String Title = "'Admin'";
+    String content = "# Header1 Header2\njifiejfiefj";
+    // encode HEX
+    // CAUTION: 
+    // Whenever you want to pass a java String to a js String, call this code
+    StringBuilder stringBuilder = new StringBuilder();
+    char[] charArray = content.toCharArray();
+    for (char c : charArray) {
+        String charToHex = "\\u" + String.format("%04X", new Integer(c));
+        stringBuilder.append(charToHex);
+    }
+
+    content = stringBuilder.toString();
+    String Title = "Admin";
 
     // TODO: complete the interaction with backend here
 %>
@@ -69,7 +80,7 @@
     </script>
     
     <script>
-        Vditor.preview(document.getElementById("preview"), <%=content%>)
+        Vditor.preview(document.getElementById("preview"), "<%=content%>")
         
         function filename (name) {
             console.log("test")
