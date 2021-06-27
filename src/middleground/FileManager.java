@@ -1,6 +1,9 @@
 public class FileManager{
+    public FileManager(){
+        manager = new DBmanager();
+    }
     public List<String> get_documents(){
-
+        
     }
     public List<string> get_documens_from_db(){
 
@@ -8,23 +11,33 @@ public class FileManager{
     public String get_document_content(String url){
 
     }
-    public List<String> filemenu{
+    public List<String> filemenu(){
+        
+    }
+    public boolean update_files(url: String, newcontent: String){
+        if(state!= )
+            return false;
+
+        
+    }
+    public boolean rename(String url, String newname){
+        
 
     }
-    public update_files(url: String, newcontent: String){
+    public boolean newfile(){
+        if(state!= )
+            return false;
 
     }
-    public rename(url: String, newname: String){
-
-    }
-    public newfile(){
-
-    }
-    public delfile(){
+    public boolean delfile(){
+        if(state!= )
+            return false;
 
     }
 
-    private string[] files;
+    private List<string> files;
     private OperationState state;
+    public static DBmanager manager;
+    private List<String> filemenu;
 
 };
