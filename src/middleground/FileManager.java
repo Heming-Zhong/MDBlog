@@ -1,4 +1,7 @@
 public class FileManager{
+    public FileManager(){
+        manager = new DBmanager();
+    }
     public List<String> get_documents(){
         
     }
@@ -17,9 +20,8 @@ public class FileManager{
 
         
     }
-    public boolean rename(url: String, newname: String){
-        if(state!= )
-            return false;
+    public boolean rename(String url, String newname){
+        
 
     }
     public boolean newfile(){
@@ -33,8 +35,9 @@ public class FileManager{
 
     }
 
-    private string[] files;
+    private List<string> files;
     private OperationState state;
+    public static DBmanager manager;
     private List<String> filemenu;
 
 };
