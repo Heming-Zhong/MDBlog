@@ -2,7 +2,52 @@
 <% 
     // just for test
     request.setCharacterEncoding("utf-8"); 
+    DBHandle handler=new DBHandle();
+
+    // 新建文件
     String newfilename = request.getParameter("newfile");
+    // 若newfile_result=0，则为默认值，不新建文件；
+    // 若newfile_result=1，则新建失败，提示错误信息；
+    // 若newfile_result=2，则新建成功；
+    int newfile_result=0;   
+    if(newfilename!=null)
+    {
+        if(handler.newfile(newfilename))
+            newfile_result=2;
+        else
+            newfile_result=1;
+    }
+
+    // 删除文件
+    String deletefilename = request.getParameter("deletefile");
+    // 若deletefile_result=0，则为默认值，不删除文件；
+    // 若deletefile_result=1，则删除失败，提示错误信息；
+    // 若deletefile_result=2，则删除成功；
+    int deletefile_result=0;   
+    if(deletefilename!=null)
+    {
+        if(handler.delfile(deletefilename))
+            deletefile_result=2;
+        else
+            deletefile_result=1;
+    }
+
+    // 重命名文件
+    String refilename = request.getParameter("renamefile");
+    String refilename = request.getParameter("oldfile");
+    // 若refile_result=0，则为默认值，不重命名文件；
+    // 若refile_result=1，则重命名失败，提示错误信息；
+    // 若refile_result=2，则重命名成功；
+    int refile_result=0;   
+    if(refilename!=null)
+    {
+        if(handler.rename(refilename))
+            refile_result=2;
+        else
+            refile_result=1;
+    }
+
+        
     String txtMsg = request.getParameter("save");
     String filename = request.getParameter("pid");
     
