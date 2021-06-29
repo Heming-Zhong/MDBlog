@@ -137,7 +137,7 @@ public class FileManager{
     // 这边需要数据库提供修改文件名的功能renameFile(String url, String newname)
     protected boolean rename(String oldname, String newname){
         // String filename = FilenameUtils.getName(url.getPath());
-        if (newname==oldname)
+        if (newname.equals(oldname))
             return true;
 
         return manager.renameFile(oldname, newname).retState == State.normal;
@@ -150,7 +150,23 @@ public class FileManager{
         else
             state = manager.addFile(filename, FileType.markdown);
 
-        return state.retState == State.normal;
+        if(state.retState == State.normal)
+        {
+            state = manager.getFile(filename);
+            if(state.retState == State.normal)
+            {
+                String url =  state.ret;
+                OutputStream outFile = new FIleOutputStream(url);
+                // outFile.write("");
+                // outFile.flush();
+                // outFile.close();
+
+                fileContent.set(filename, newcontent);
+            }
+            return false;
+        }
+
+        return false;
     }
 
     protected boolean delfile(String filename){
@@ -158,13 +174,22 @@ public class FileManager{
         OperationState state = manager.delFile(filename);
         // 删除实际文件
         // TODO:
-        
+        try{
+            String filePath = manager.getFile(filename);
+            filePath = filePath.toString();
+            java.io.File myDelFile = new java.io.File(filePath);
+            myDelFile.delete();
+        }
+        catch(Exception e){
+            System.out.println("delete failure.");
+            e.printStackTrace();
+        }
+
         return state.retState == State.normal;
     }
 
     // // filename -> url
     // protected Map<String, String> buffer;
-
 
     // protected OperationState state;
     protected DBmanager manager;

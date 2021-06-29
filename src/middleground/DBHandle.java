@@ -11,14 +11,20 @@ import FileManager;
 
 public class DBHandle extends FileManager{
     DBHandle(){
-        loged = false;
+        admin = false;
     }
     //
+
+    public boolean getAuthority(){
+        return admin;
+    }
+
     public boolean validate(String user, String passwd){
         // DBmanager manager = new DBmanager();
         OperationState state = super.manager.login(user, passwd);
-        loged = state.retState == OperationState.State.normal;
-        return loged;
+        // loged = state.retState == OperationState.State.normal;
+        admin = state.ret.equals("admin");
+        return state.retState == OperationState.State.normal;
     }
 
     // to do
@@ -29,8 +35,6 @@ public class DBHandle extends FileManager{
         // return loged;
         return false;
     }
-
-
 
     public List<String> filemenu(){
         return super.filemenu();
@@ -45,7 +49,6 @@ public class DBHandle extends FileManager{
     // }
 
 
-
     // 获取文件内容
     public String get_document_content(String filename){
         return super.get_document_content(filename);
@@ -53,7 +56,7 @@ public class DBHandle extends FileManager{
 
     // 
     public boolean update_file(String filename, String newcontent){
-        if(loged)
+        if(admin)
             return super.update_file(filename, newcontent);
 
         return false;
@@ -61,25 +64,26 @@ public class DBHandle extends FileManager{
 
     // 这边需要数据库提供修改文件名的功能renameFile(String filename, String newname)
     public boolean rename(String filename, String newname){
-        if(loged)
+        if(admin)
             return super.rename(filename, newcontent);
 
         return false;
 
     }
     public boolean newfile(String filename){
-        if(loged)
+        if(admin)
             return super.newfile(filename);
 
         return false;
     }
     public boolean delfile(String filename){
-        if(loged)
+        if(admin)
             return super.delfile(filename);
 
         return false;
     }
     
-    private boolean loged;
+    // private boolean loged;
+    private boolean admin;
 };
 
