@@ -13,10 +13,10 @@ public class UserManager {
     Connection myConnection;
 
     //TODO: Prove User Table
-    UserManager(Connection dbConnection) {
+    public UserManager(Connection dbConnection) {
         myConnection = dbConnection;
     }
-    OperationState register(String userName, String passwd, UserPermission permission) {
+    public OperationState register(String userName, String passwd, UserPermission permission) {
         int tmp = 0;
         if (permission == UserPermission.admin) {
             tmp = 1;
@@ -48,9 +48,11 @@ public class UserManager {
         return new OperationState(State.normal, String.format("Success create user %s with ID %d", userName, userKey), "Success");
     }
 
-    OperationState login(String userName, String passwd) {
+    public OperationState login(String userName, String passwd) {
         Boolean flag = false;
         String query = String.format("SELECT * FROM User WHERE UserName = ? and Passwd = ?;");
+        Integer permissionInt = 2;
+        String permissionStr = "";
 
         try {
             PreparedStatement stmt = myConnection.prepareStatement(query);
@@ -60,6 +62,7 @@ public class UserManager {
 
             while (rs.next()) {
                 flag = true;
+                permissionInt = rs.getInt("Permission");
             }
 
             stmt.close();
@@ -68,14 +71,25 @@ public class UserManager {
             System.exit(0);
         }
 
+        switch (permissionInt) {
+        case 0:
+            permissionStr = "admin";
+            break;
+        case 1:
+        default:
+            permissionStr = "visitor";
+            break;
+
+        }
+
         if (flag) {
-            return new OperationState(State.normal, String.format("User %s login success", userName), "Success");
+            return new OperationState(State.normal, String.format("User %s login success", userName), permissionStr);
         } else {
             return new OperationState(State.normal, String.format("User %s login failed", userName), "Login Failed");
         }
     }
 
-    OperationState changeName(String oldName, String newName) {
+    public OperationState changeName(String oldName, String newName) {
         Integer affectLine = 0;
         String query = "UPDATE User SET UserName = ? WHERE UserName = ?";
         
@@ -97,9 +111,9 @@ public class UserManager {
         }
     }
 
-    OperationState changePasswd(String userName, String newPasswd) {
+    public OperationState changePasswd(String userName, String newPasswd) {
         Integer affectLine = 0;
-        String query = "UPDATE User SET Passwd = ? WHERE UserName = ?";
+        String query = "UPDATE User set Passwd = ? WHERE UserName = ?";
         
         try {
             PreparedStatement stmt = myConnection.prepareStatement(query);
