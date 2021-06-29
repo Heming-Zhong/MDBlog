@@ -3,7 +3,14 @@
     // just for test
     request.setCharacterEncoding("utf-8"); 
     String txtMsg = request.getParameter("save");
-    String content = "# Header1 Header2\njifiejfiefj";
+    String filename = request.getParameter("pid");
+    
+    // TODO: complete the interaction with backend here
+    List<String> M_list=filemenu();
+    if(filename==null)
+        filename=M_list[0];
+    
+    String content = get_document_content(filename);
     if (txtMsg != null) {
         content = txtMsg;
     }
@@ -20,7 +27,13 @@
     content = stringBuilder.toString();
     String Title = "Admin";
 
-    // TODO: complete the interaction with backend here
+    StringBuilder menulist=new StringBuilder("");
+    for(String str: M_list)
+    {
+        String url1 = "main_edit.jsp?pid=" + str;
+        menulist.append("<a href='" + url1 + "'>" + str + "</a> ");
+    }
+
 %>
 
 <!DOCTYPE HTML>
