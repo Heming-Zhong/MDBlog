@@ -15,12 +15,6 @@ public class UserManager {
     //TODO: Prove User Table
     UserManager(Connection dbConnection) {
         myConnection = dbConnection;
-
-        try {
-        } catch (Exception e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
-        }
     }
     OperationState register(String userName, String passwd, UserPermission permission) {
         int tmp = 0;
