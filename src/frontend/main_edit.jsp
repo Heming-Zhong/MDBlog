@@ -2,6 +2,7 @@
 <% 
     // just for test
     request.setCharacterEncoding("utf-8"); 
+    String newfilename = request.getParameter("newfile");
     String txtMsg = request.getParameter("save");
     String filename = request.getParameter("pid");
     
@@ -33,7 +34,6 @@
         String url1 = "main_edit.jsp?pid=" + str;
         menulist.append("<a href='" + url1 + "'>" + str + "</a> ");
     }
-
 %>
 
 <!DOCTYPE HTML>
@@ -45,6 +45,7 @@
     <!-- ⚠️生产环境请指定版本号，如 https://cdn.jsdelivr.net/npm/vditor@x.x.x/dist... -->
     <link rel="stylesheet" href="/css/purple.css" />
     <link rel="stylesheet" href="/dist/index.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/purple.user.css" />
     <title><%=Title%></title>
 </head>
@@ -62,6 +63,7 @@
     }
     .vditor {
         --textarea-background-color: #fff;
+        border-radius: 0px;
     }
     .vditor--dark {
         --panel-background-color: #121213;
@@ -90,9 +92,23 @@
 </style>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper" style="display: inline-flex;">
+        <div id="nav" style="min-width: 15em; display: block;" >
+            <div id="list-item">
+                <%menulist%>
+                <a class="nav-list" href="main_edit.jsp?save=hello">item1</a>
+                <a class="nav-list" href="">item2</a>
+                <a class="nav-list" href="">item3</a>
+                <a class="nav-list" href="">item4</a>
+                <form  method="post" action="main_edit.jsp" id ="passForm">  
+                    <input class="nav-list" name="newfile" id="newfile" type="hidden" placeholder="newname.md">
+                </form>
+            </div>
+            <button onclick="newfile()">新建</button>
+        </div>
         <!--  vditor--fullscreen -->
         <div id="vditor" class="vditor "></div>
+        <!-- <button onclick="= GetContent()">get content</button> -->
     </div>
     <button onclick="save()">submit</button>
     <form  method="post" action="main_edit.jsp" id ="passForm">  
@@ -102,6 +118,7 @@
     </script>
     
     <script>
+        // alert("<%out.print(newfilename);%>")
         var edited = false
         var editor = new Vditor('vditor', {
             toolbarConfig: {
@@ -111,7 +128,7 @@
             counter: {
                 enable: true
             },
-            height: window.innerHeight * 0.8,
+            height: window.innerHeight,
             tab: '    ',
             icon: 'ant',
             outline: {
@@ -144,6 +161,9 @@
             after: function() {
                 // TODO: assign the content of first doc got from java to the editor
                 var test = "<%out.print(content);%>";
+                console.log(test)
+                // var test = "${content}";
+                // test = getStringFromHex(test);
                 SetContent(test);
             }
         })
@@ -166,6 +186,10 @@
             alert(GetContent())
             var formObj = document.getElementById('passForm'); 
             formObj.submit(); 
+        }
+
+        newfile = function() {
+            document.getElementById('newfile').type = 'text';
         }
 
         GetContent = function() {
