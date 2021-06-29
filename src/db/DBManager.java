@@ -10,12 +10,12 @@ public class DBManager {
     private DBConfig conf;
     private UserManager userDBM;
     private FileManager fileDBM; 
-    private TagManager tagDBM;
+    // private TagManager tagDBM;
 
     private Boolean isLogined;
     private UserPermission myPermission;
     private String myUserName;
-    private String myUserId;
+    // private String myUserId;
 
     private Connection DBConnection;
 
@@ -24,7 +24,7 @@ public class DBManager {
         isLogined = false;
         myPermission = UserPermission.visitor;
         myUserName = "";
-        myUserId = "";
+        // myUserId = "";
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -95,8 +95,11 @@ public class DBManager {
             return new OperationState(State.error, "You can't change other's passwd", "You can't change other's passwd");
         }
     }
-// ### 文件
+
+
     public OperationState addFile(String fileName, FileType fileType) {
+        // 新增一个空白文件
+        // 要求管理员登陆。
         if (!isLogined) {
             return new OperationState(State.error, "Login First", "Login First");
         }
@@ -106,12 +109,10 @@ public class DBManager {
             return new OperationState(State.error, "You can't add file", "You can't change add file");
         }
     }
-//   - 新增一个空白文件
-//   - 要求管理员登陆。
     public OperationState delFile(String fileName) {
-//   - 删除一个文件。
-//   - 要求管理员登陆。
-//   - 若文件作为依赖表中的依赖存在，则不允许删除
+        // 删除一个文件。
+        // 要求管理员登陆。
+        // 若文件作为依赖表中的依赖存在，则不允许删除
         if (!isLogined) {
             return new OperationState(State.error, "Login First", "Login First");
         }
@@ -122,8 +123,8 @@ public class DBManager {
         }
     }
     public OperationState renameFile(String oldName, String newName) {
-//   - 重命名一个文件。
-//   - 并不保证更改**实际**的文件名。
+        // 重命名一个文件。
+        // 并不保证更改**实际**的文件名。
         if (!isLogined) {
             return new OperationState(State.error, "Login First", "Login First");
         }
@@ -134,8 +135,8 @@ public class DBManager {
         }
     }
         public OperationState listFile() {
-//   - 列出文件列表。
-//   - 默认允许不允许访客使用，在配置文件中更改。
+        // 列出文件列表。
+        // 默认允许不允许访客使用，在配置文件中更改。
         if (!isLogined) {
             return new OperationState(State.error, "Login First", "Login First");
         }
@@ -146,10 +147,8 @@ public class DBManager {
         }
     }
     public OperationState listFile(FileType fileType) {
-//   - 列出指定类型的文件列表。
-//   - 默认只允许访客使用markdown列表，在配置文件中更改。
-// - `OperationState listFile(List<String> tags)`
-//   - 列出带有指定Tag的文件列表（逻辑与）。
+        // 列出指定类型的文件列表。
+        // 默认只允许访客使用markdown列表，在配置文件中更改。
         if (!isLogined) {
             return new OperationState(State.error, "Login First", "Login First");
         }
@@ -159,11 +158,15 @@ public class DBManager {
             return new OperationState(State.error, "You can't add file", "You can't change add file");
         }
     }
+
+    //TODO: OperationState listFile(List<String> tags)
+    
     public OperationState getFile(String fileName) {
-//   - 返回文件的实际URL。
+        // 返回文件的实际URL。
         if (!isLogined) {
             return new OperationState(State.error, "Login First", "Login First");
         }
         return fileDBM.getFile(fileName);
     }
+
 }
