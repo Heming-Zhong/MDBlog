@@ -9,18 +9,20 @@
  */
 import FileManager;
 
-public class Loginhandle{
-
+public class DBHandle extends FileManager{
+    DBHandle(){
+        loged = false;
+    }
     //
     public boolean validate(String user, String passwd){
         // DBmanager manager = new DBmanager();
-        OperationState state = obj.manager.login(user, passwd);
+        OperationState state = super.manager.login(user, passwd);
         loged = state.retState == OperationState.State.normal;
         return loged;
     }
 
+    // to do
     public boolean register(String user, String passwd){
-        //to do
         // manager = new DBmanager();
         // OperationState state = manager.register(user, passwd, permission);
         // loged = state.retState == OperationState.State.normal;
@@ -31,7 +33,7 @@ public class Loginhandle{
 
 
     public List<String> filemenu(){
-        return obj.filemenu();
+        return super.filemenu();
     }
 
     // // 
@@ -46,42 +48,38 @@ public class Loginhandle{
 
     // 获取文件内容
     public String get_document_content(String filename){
-        return obj.get_document_content(filename);
+        return super.get_document_content(filename);
     }
 
     // 
     public boolean update_file(String filename, String newcontent){
         if(loged)
-            return obj.update_file(filename, newcontent);
+            return super.update_file(filename, newcontent);
 
         return false;
     }
 
-    // 这边需要数据库提供修改文件名的功能renameFile(String url, String newname)
-    public boolean rename(String url, String newname){
+    // 这边需要数据库提供修改文件名的功能renameFile(String filename, String newname)
+    public boolean rename(String filename, String newname){
         if(loged)
-            return obj.rename(filename, newcontent);
+            return super.rename(filename, newcontent);
 
         return false;
 
     }
     public boolean newfile(String filename){
         if(loged)
-            return obj.newfile(filename);
+            return super.newfile(filename);
 
         return false;
-
     }
     public boolean delfile(String filename){
         if(loged)
-            return obj.delfile(filename);
+            return super.delfile(filename);
 
         return false;
     }
     
-
-
-    private FileManager obj;
     private boolean loged;
 };
 
