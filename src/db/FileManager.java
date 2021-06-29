@@ -38,7 +38,7 @@ public class FileManager {
             permissionInt = 1;
         }
 
-        String query = String.format("INSERT INTO File (FileName, FilePath, FileType, Permission) VALUES (?, ?, ?)");
+        String query = String.format("INSERT INTO File (FileName, FilePath, FileType, Permission) VALUES (?, ?, ?, ?)");
         Long fileKey = -1L;
         String filePath = pathPrefix + fileName;
         try {

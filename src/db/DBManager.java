@@ -10,7 +10,7 @@ public class DBManager {
     private DBConfig conf;
     private UserManager userDBM;
     private FileManager fileDBM; 
-    private TagManager tagDBM;
+    // private TagManager tagDBM;
 
     private Boolean isLogined;
     private UserPermission myPermission;

@@ -32,3 +32,9 @@ ol{
 a.nav-list:hover {
     background-color: rgb(40, 40, 42);
 }
+
+#tool-bar {
+    position: fixed;
+    bottom: 10%;
+    align-content: center;
+}
