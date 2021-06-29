@@ -10,6 +10,8 @@
 import FileManager;
 
 public class Loginhandle{
+
+    //
     public boolean validate(String user, String passwd){
         // DBmanager manager = new DBmanager();
         OperationState state = obj.manager.login(user, passwd);
@@ -26,9 +28,60 @@ public class Loginhandle{
         return false;
     }
 
+
+
+    public List<String> filemenu(){
+        return obj.filemenu();
+    }
+
+    // // 
+    // public List<String> get_documents(){
+    // 
+    // }
+    // get_documens_from_db(){
+    //
+    // }
+
+
+
+    // 获取文件内容
+    public String get_document_content(String filename){
+        return obj.get_document_content(filename);
+    }
+
+    // 
+    public boolean update_file(String filename, String newcontent){
+        if(loged)
+            return obj.update_file(filename, newcontent);
+
+        return false;
+    }
+
+    // 这边需要数据库提供修改文件名的功能renameFile(String url, String newname)
+    public boolean rename(String url, String newname){
+        if(loged)
+            return obj.rename(filename, newcontent);
+
+        return false;
+
+    }
+    public boolean newfile(String filename){
+        if(loged)
+            return obj.newfile(filename);
+
+        return false;
+
+    }
+    public boolean delfile(String filename){
+        if(loged)
+            return obj.delfile(filename);
+
+        return false;
+    }
     
+
+
     private FileManager obj;
-    public String message;
     private boolean loged;
 };
 
