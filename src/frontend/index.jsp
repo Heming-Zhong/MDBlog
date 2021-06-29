@@ -13,6 +13,12 @@
     String Title = "Login";
 
     // TODO: 验证用户内容并跳转
+    Loginhandle handler=new Loginhandle();
+
+    if(validate(user,passwd))
+        window.location = "main_edit.jsp";
+    else
+        alert("用户不存在或密码错误！");
 %>
 
 <!DOCTYPE html>
