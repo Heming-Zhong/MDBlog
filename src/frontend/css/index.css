@@ -1,0 +1,55 @@
+.input {
+    margin: auto;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+input.inputfield:focus {
+    background-color: antiquewhite;
+    border-color: blue;
+}
+
+input.inputfield {
+    background-color: aliceblue;
+    border-radius: 0.3em;
+}
+
+.inputfield {
+    display: block;
+    margin: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    height: 2em;
+    width: 15em;
+}
+
+div.inputfield {
+    text-align: center;
+}
+
+h1.title {
+    text-align: center;
+}
+
+button.btn {
+    width: 5em;
+    padding: 8px;
+    background-color: #428bca;
+    border-color: #357ebd;
+    color: #fff;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    /* future proofing */
+    -khtml-border-radius: 10px;
+    /* for old Konqueror browsers */
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    font-weight: 900;
+    font-size: 125%
+}
+
+button.btn:active {
+    background-color: #1f6098;
+}
