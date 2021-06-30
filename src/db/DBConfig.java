@@ -3,7 +3,8 @@ package db;
 public class DBConfig {
     public Boolean permitAdminReg;
     public Boolean permitVisitorListAll;
-    public Integer loginTokenTimeOut;
+    public Long loginTokenTimeOut;
+    public String sqliteFile;
 
     public String DBURL;
     public String DBUser;
@@ -12,6 +13,7 @@ public class DBConfig {
     public DBConfig() {
         permitAdminReg = true;
         permitVisitorListAll = false;
-        loginTokenTimeOut = 1800000; //30min
+        loginTokenTimeOut = 1800000L; //30min
+        sqliteFile = "mdblog.db";
     }
 }

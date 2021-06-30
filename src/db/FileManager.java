@@ -57,7 +57,7 @@ public class FileManager {
             stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
         if (fileKey == -1L) {
@@ -81,7 +81,7 @@ public class FileManager {
             stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
         if (affectLine > 0) {
@@ -106,7 +106,7 @@ public class FileManager {
             stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
         if (affectLine > 0) {
@@ -131,7 +131,7 @@ public class FileManager {
             stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
         if (flag) {
@@ -169,7 +169,7 @@ public class FileManager {
             stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
         if (flag) {
@@ -198,7 +198,7 @@ public class FileManager {
             stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
         if (flag) {
