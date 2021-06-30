@@ -28,13 +28,13 @@ public class DBManager {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            DBConnection = DriverManager.getConnection("jdbc:sqlite:mdblog.db");
+            DBConnection = DriverManager.getConnection("jdbc:sqlite:" + config.sqliteFile);
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            // System.exit(0);
         }
 
-        userDBM = new UserManager(DBConnection);
+        userDBM = new UserManager(DBConnection, config.loginTokenTimeOut);
         fileDBM = new FileManager(DBConnection);
         // tagDBM = new TagManager(DBConnection);
     }
@@ -49,7 +49,7 @@ public class DBManager {
         // 后续的大部分操作需要登陆才能进行。
         OperationState state = userDBM.login(userName, passwd);
         if (state.retState == State.normal) {
-            switch (state.ret) {
+            switch (state.retList.get(1)) {
             case "admin":
                 myPermission = UserPermission.admin;
                 break;
@@ -63,6 +63,26 @@ public class DBManager {
         }
         return state;
     }
+    public OperationState login(String token) {
+        // 登陆。
+        // 后续的大部分操作需要登陆才能进行。
+        OperationState state = userDBM.login(token);
+        if (state.retState == State.normal) {
+            switch (state.retList.get(1)) {
+            case "admin":
+                myPermission = UserPermission.admin;
+                break;
+            case "visitor":
+            default:
+                myPermission = UserPermission.visitor;
+                break;
+            }
+            myUserName = state.retList.get(0);
+            isLogined = true;
+        }
+        return state;
+    }
+
     public OperationState changeName(String oldName, String newName) {
         // 更改用户名。
         // 要求登陆
