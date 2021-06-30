@@ -5,24 +5,25 @@
     request.setCharacterEncoding("utf-8"); 
     String username = request.getParameter("user");
     if (username == null) {
-        username = "admin";
+        //username = "admin";
     }
     String passwd = request.getParameter("passwd");
     if (passwd == null) {
-        passwd = "123";
+        //passwd = "123";
     }
     String Title = "Login";
 
     // TODO: 验证用户内容并跳转
-    DBHandle handler=new DBHandle(username, passwd);
     String location = "index.jsp";
-    //String res = handler.get_document_content("fefegjiorogjor");
-    String loginres = handler.gettoken();
-    if(loginres != null && handler.getAuthority() == true)
-        location = "main_edit.jsp";
-    else 
-        location = "main_preview.jsp";
-        //alert("用户不存在或密码错误！");
+    String loginres = null;
+    if (username != null && passwd != null) {
+        DBHandle handler = new DBHandle(username, passwd);
+        loginres = handler.gettoken();
+        if(loginres != null && handler.getAuthority() == true)
+            location = "main_edit.jsp";
+        else 
+            location = "main_preview.jsp";
+    }
 %>
 
 <!DOCTYPE html>
