@@ -34,14 +34,14 @@
 
     // 重命名文件
     String refilename = request.getParameter("renamefile");
-    String refilename = request.getParameter("oldfile");
+    String oldfilename = request.getParameter("oldfile");
     // 若refile_result=0，则为默认值，不重命名文件；
     // 若refile_result=1，则重命名失败，提示错误信息；
     // 若refile_result=2，则重命名成功；
     int refile_result=0;   
     if(refilename!=null)
     {
-        if(handler.rename(refilename))
+        if(handler.rename(oldfilename,refilename))
             refile_result=2;
         else
             refile_result=1;
@@ -56,9 +56,19 @@
     if(filename==null)
         filename=M_list[0];
     
+    // 提交文件
+    // 若upfile_result=0，则为默认值，不新建文件；
+    // 若upfile_result=1，则新建失败，提示错误信息；
+    // 若upfile_result=2，则新建成功；
+    int upfile_result=0;
     String content = get_document_content(filename);
     if (txtMsg != null) {
         content = txtMsg;
+        if(handler.update_file(updatefilename,content))
+            upfile_result=2;
+        else
+            upfile_result=1;
+
     }
     // encode HEX
     // CAUTION: 
