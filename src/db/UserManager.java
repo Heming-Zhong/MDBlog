@@ -111,7 +111,7 @@ public class UserManager {
         if (flag) {
             return new OperationState(State.normal, String.format("User %s login success", userName), new ArrayList<String>(Arrays.asList(token, permissionStr)));
         } else {
-            return new OperationState(State.normal, String.format("User %s login failed", userName), "Login Failed");
+            return new OperationState(State.error, String.format("User %s login failed", userName), "Login Failed");
         }
     }
 
@@ -178,7 +178,7 @@ public class UserManager {
         if (flag) {
             return new OperationState(State.normal, String.format("User %s login success", userName), new ArrayList<String>(Arrays.asList(userName, permissionStr)));
         } else {
-            return new OperationState(State.normal, String.format("Token %s login failed", token), "Login Failed");
+            return new OperationState(State.error, String.format("Token %s login failed", token), "Login Failed");
         }
     }
 

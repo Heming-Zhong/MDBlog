@@ -71,6 +71,9 @@ public class DBHandle {
     }
 
     private String login(String user, String passwd){
+        if (user == null || passwd == null) {
+            return null;
+        }
         OperationState state = manager.login(user, passwd);
         if(state.retState == State.normal){
             admin = state.retList.get(1).equals("admin");
