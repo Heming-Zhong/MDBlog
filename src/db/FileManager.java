@@ -47,7 +47,7 @@ public class FileManager {
             stmt.setString(2, filePath);
             stmt.setInt(3, typeInt);
             stmt.setInt(4, permissionInt);
-            stmt.executeUpdate(query);
+            stmt.executeUpdate();
             
             ResultSet fileKeys = stmt.getGeneratedKeys();
             while (fileKeys.next()) {

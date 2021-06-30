@@ -29,7 +29,7 @@ public class UserManager {
             stmt.setString(1, userName);
             stmt.setString(2, passwd);
             stmt.setInt(3, tmp);
-            stmt.executeUpdate(query);
+            stmt.executeUpdate();
             
             ResultSet userKeys = stmt.getGeneratedKeys();
             while (userKeys.next()) {
