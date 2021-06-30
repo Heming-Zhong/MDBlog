@@ -31,76 +31,52 @@ public class DBHandle {
     private DBManager manager;
     
     // filename -> content
-    /***************************************/
     private Map<String, String> fileContent;
+
+    // (boolean) tag of login
+    private boolean logined;
+
+    /***************************************/
     public DBHandle(){
         admin = false;
+        logined = false;
         manager = new DBManager(new DBConfig());
         fileContent = new HashMap<String,String>();
+    }
+    public DBHandle(String token){
+        admin = false;
+        logined = false;
+        manager = new DBManager(new DBConfig());
+        fileContent = new HashMap<String,String>();
+        OperationState state = manager.login(token);
+        admin = state.retList.get(1).equals("admin");
+        if(state.retState == State.normal)
+            logined = true;
     }
 
     public boolean getAuthority(){
         return admin;
     }
 
-    public boolean validate(String user, String passwd){
+    public String validate(String user, String passwd){
         OperationState state = manager.login(user, passwd);
-        admin = state.ret.equals("admin");
-        return state.retState == State.normal;
+        admin = state.retList.get(1).equals("admin");
+        return state.ret;
     }
 
-    // to do
-    public boolean register(String user, String passwd){
-        OperationState state = manager.register(user, passwd, UserPermission.visitor);
-        if(state.retState == State.normal)
-            return this.validate(user, passwd);
-        return state.retState == State.normal;
-    }
-
-    // // 
-    // public List<String> get_documents(){
-    // 
-    // }
-    // get_documens_from_db(){
-    //
+    // public String register(String user, String passwd){
+    //     OperationState state = manager.register(user, passwd, UserPermission.visitor);
+    //     if(state.retState == State.normal)
+    //         return this.validate(user, passwd);
+    //     return "error";
     // }
 
     
-
-    // 
-    // public boolean update_file(String filename, String newcontent){
-    //     if(admin)
-    //         return update_file(filename, newcontent);
-
-    //     return false;
-    // }
-
-    // 这边需要数据库提供修改文件名的功能renameFile(String filename, String newname)
-    // public boolean rename(String filename, String newname){
-    //     if(admin)
-    //         return rename(filename, newcontent);
-
-    //     return false;
-
-    // }
-    // public boolean newfile(String filename){
-    //     if(admin)
-    //         return newfile(filename);
-
-    //     return false;
-    // }
-    // public boolean delfile(String filename){
-    //     if(admin)
-    //         return delfile(filename);
-
-    //     return false;
-    // }
-
     /***************************************/
     // 获取文件名列表
     public List<String> filemenu(){
         List<String> ans = null;
-
+        
         OperationState state = manager.listFile();
         if(state.retState==State.normal){
             return state.retList;
@@ -114,10 +90,7 @@ public class DBHandle {
         // String url = buffer.get();
         String content = "";
         String url = state.ret;
-
-
-        // if(){
-
+            
         try (InputStream is = new URL(url).openStream();){
             
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -128,49 +101,19 @@ public class DBHandle {
             }
             content = sb.toString();
             
-        } catch(Exception e) {
-
-        }
-        // }
-        // else{
-
-        // }
+        } catch(Exception e) { }
 
         return content;
     }
-
-    // public static void writeFile(BufferedInputStream bis,boolean bis_closeFlag,
-    //         String fileName,HttpServletResponse response) 
-    //         throws IOException {
-	// 	if(bis==null) {
-	// 		return ;
-	// 	}
-	// 	int len=0;
-	// 	byte[ ] bs=new byte[2048];
-	// 	if(StringUtils.isNotBlank(fileName)) {
-	// 		response.setContentType("application/octet-stream; charset=utf-8");
-	// 		response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"));
-	// 	}
-		
-	// 	while((len=bis.read(bs))!=-1) {
-	// 		response.getOutputStream().write(bs,0,len);
-	// 	}
-	// 	if(bis_closeFlag) {
-	// 		bis.close();
-	// 	}
-	// 	response.getOutputStream().flush();
-	// }
-
-    // 
+                                
     public boolean update_file(String filename, String newcontent){
         // String oldcontent = fileContent
-        if(!admin)
+        if(!logined || !admin)
             return false;
-
+        
         if(!fileContent.containsKey(filename))
             return false;
         
-
         try {
             OperationState state = manager.getFile(filename);
             String url = state.ret;
@@ -179,36 +122,36 @@ public class DBHandle {
             outFile.write(bytesArr);
             outFile.flush();
             outFile.close();
-
+            
             fileContent.put(filename, newcontent);
-
+            
         } catch (Exception e) {  
             return false;
         }
-
+        
         return true;
     }
-
+    
     // 这边需要数据库提供修改文件名的功能renameFile(String url, String newname)
     public boolean rename(String oldname, String newname){
         // String filename = FilenameUtils.getName(url.getPath());
-        if(!admin)
+        if(!logined || !admin)
             return false;
         if (newname.equals(oldname))
             return true;
-
         return manager.renameFile(oldname, newname).retState == State.normal;
     }
-
+    
     public boolean newfile(String filename){
-        // if(!admin)
-        //     return false;
+        if(!logined || !admin)
+            return false;
+
         OperationState state;
         if(!filename.substring(filename.length()-2).equals("md"))
             state = manager.addFile(filename, FileType.resource);    
         else
             state = manager.addFile(filename, FileType.markdown);
-
+        
         if(state.retState == State.normal)
         {
             state = manager.getFile(filename);
@@ -230,12 +173,12 @@ public class DBHandle {
             }
             return true;
         }
-
+        
         return false;
     }
-
+    
     public boolean delfile(String filename){
-        if(!admin)
+        if(!logined || !admin)
             return false;
         // 删除数据库项
         OperationState state = manager.delFile(filename);
@@ -251,7 +194,7 @@ public class DBHandle {
             System.out.println("delete failure.");
             e.printStackTrace();
         }
-
+        
         return state.retState == State.normal;
     }
 };
