@@ -106,7 +106,7 @@ public class DBManager {
         if (myPermission == UserPermission.admin) {
             return fileDBM.addFile(fileName, fileType, myPermission);
         } else {
-            return new OperationState(State.error, "You can't add file", "You can't change add file");
+            return new OperationState(State.error, "You can't add file", "You can't add file");
         }
     }
     public OperationState delFile(String fileName) {
@@ -119,7 +119,7 @@ public class DBManager {
         if (myPermission == UserPermission.admin) {
             return delFile(fileName);
         } else {
-            return new OperationState(State.error, "You can't add file", "You can't change add file");
+            return new OperationState(State.error, "You can't del file", "You can't del file");
         }
     }
     public OperationState renameFile(String oldName, String newName) {
@@ -131,7 +131,7 @@ public class DBManager {
         if (myPermission == UserPermission.admin) {
             return renameFile(oldName, newName);
         } else {
-            return new OperationState(State.error, "You can't add file", "You can't change add file");
+            return new OperationState(State.error, "You can't rename", "You can't rename file");
         }
     }
         public OperationState listFile() {
@@ -143,7 +143,7 @@ public class DBManager {
         if (myPermission == UserPermission.admin || conf.permitVisitorListAll) {
             return listFile();
         } else {
-            return new OperationState(State.error, "You can't add file", "You can't change add file");
+            return new OperationState(State.error, "You can't list", "You can't list");
         }
     }
     public OperationState listFile(FileType fileType) {
@@ -155,7 +155,7 @@ public class DBManager {
         if (myPermission == UserPermission.admin || conf.permitVisitorListAll) {
             return listFile(fileType);
         } else {
-            return new OperationState(State.error, "You can't add file", "You can't change add file");
+            return new OperationState(State.error, "You can't list", "You can't list");
         }
     }
 
