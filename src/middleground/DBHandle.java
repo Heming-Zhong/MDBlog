@@ -37,6 +37,8 @@ public class DBHandle {
 
     // (boolean) tag of login
     private boolean logined;
+    
+    private String token;
 
     /***************************************/
     public DBHandle(){
@@ -44,6 +46,13 @@ public class DBHandle {
         logined = false;
         manager = new DBManager(new DBConfig());
         fileContent = new HashMap<String,String>();
+    }
+    public DBHandle(String user, String passwd){
+        admin = false;
+        logined = false;
+        manager = new DBManager(new DBConfig());
+        fileContent = new HashMap<String,String>();
+        token = login(user, passwd);
     }
     public DBHandle(String token){
         admin = false;
@@ -61,7 +70,7 @@ public class DBHandle {
         return admin;
     }
 
-    public String validate(String user, String passwd){
+    private String login(String user, String passwd){
         OperationState state = manager.login(user, passwd);
         if(state.retState == State.normal){
             admin = state.retList.get(1).equals("admin");
@@ -69,6 +78,10 @@ public class DBHandle {
         }
         
         return null;
+    }
+
+    public String gettoken() {
+        return token;
     }
 
     // public String register(String user, String passwd){

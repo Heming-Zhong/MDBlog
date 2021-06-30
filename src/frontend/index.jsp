@@ -14,9 +14,11 @@
     String Title = "Login";
 
     // TODO: 验证用户内容并跳转
-    DBHandle handler=new DBHandle();
+    DBHandle handler=new DBHandle(username, passwd);
     String location = "index.jsp";
-    if(handler.validate(username,passwd))
+    //String res = handler.get_document_content("fefegjiorogjor");
+    String loginres = handler.gettoken();
+    if(loginres != null && handler.getAuthority() == true)
         location = "main_edit.jsp";
     else 
         location = "main_preview.jsp";
@@ -51,7 +53,7 @@
         }
         var redirect = "<%out.print(location);%>"
         if (redirect == "main_preview.jsp" || redirect == "main_edit.jsp") {
-            window.location = redirect + "?user=" + "<%out.print(username);%>;" + "passwd=" + "<%out.print(passwd);%>;"
+            window.location = redirect + "?token=" + "<%out.print(loginres);%>;"
         }
         // debug to see the submission of user info
         alert("<%out.print(username);%>");

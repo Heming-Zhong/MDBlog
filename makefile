@@ -6,3 +6,6 @@ build:
 deploy: build
 	cp bin/db/* ~/apache-tomcat-10.0.6/webapps/ROOT/WEB-INF/classes/db/
 	cp bin/middleground/* ~/apache-tomcat-10.0.6/webapps/ROOT/WEB-INF/classes/middleground/
+
+clean: 
+	rm -r bin/*
