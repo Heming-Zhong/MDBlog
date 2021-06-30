@@ -137,7 +137,7 @@ public class DBManager {
             return new OperationState(State.error, "Login First", "Login First");
         }
         if (myPermission == UserPermission.admin) {
-            return delFile(fileName);
+            return fileDBM.delFile(fileName);
         } else {
             return new OperationState(State.error, "You can't del file", "You can't del file");
         }
@@ -161,7 +161,7 @@ public class DBManager {
             return new OperationState(State.error, "Login First", "Login First");
         }
         if (myPermission == UserPermission.admin || conf.permitVisitorListAll) {
-            return listFile();
+            return fileDBM.listFile();
         } else {
             return new OperationState(State.error, "You can't list", "You can't list");
         }
@@ -173,7 +173,7 @@ public class DBManager {
             return new OperationState(State.error, "Login First", "Login First");
         }
         if (myPermission == UserPermission.admin || conf.permitVisitorListAll) {
-            return listFile(fileType);
+            return fileDBM.listFile(fileType);
         } else {
             return new OperationState(State.error, "You can't list", "You can't list");
         }

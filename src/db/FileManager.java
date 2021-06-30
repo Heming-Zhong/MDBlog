@@ -74,7 +74,7 @@ public class FileManager {
         try {
             PreparedStatement stmt = myConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, fileName);
-            stmt.executeUpdate(query);
+            stmt.executeUpdate();
             
             affectLine = stmt.executeUpdate();
 
@@ -125,6 +125,7 @@ public class FileManager {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                flag = true;
                 ret.add(rs.getString("FileName"));
             }
 
@@ -163,6 +164,7 @@ public class FileManager {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                flag = true;
                 ret.add(rs.getString("FileName"));
             }
 
@@ -192,6 +194,7 @@ public class FileManager {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                flag = true;
                 ret = rs.getString("FilePath");
             }
 

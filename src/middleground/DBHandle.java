@@ -67,7 +67,7 @@ public class DBHandle {
     }
 
     public boolean getAuthority(){
-        return admin;
+        return (admin && logined);
     }
 
     private String login(String user, String passwd){
@@ -76,6 +76,7 @@ public class DBHandle {
         }
         OperationState state = manager.login(user, passwd);
         if(state.retState == State.normal){
+            logined = true;
             admin = state.retList.get(1).equals("admin");
             return state.retList.get(0);
         }
@@ -86,6 +87,7 @@ public class DBHandle {
     public String gettoken() {
         return token;
     }
+
 
     // public String register(String user, String passwd){
     //     OperationState state = manager.register(user, passwd, UserPermission.visitor);

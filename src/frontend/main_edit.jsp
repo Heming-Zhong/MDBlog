@@ -152,7 +152,7 @@
 </style>
 
 <body>
-    <div id="wrapper" style="display: inline-flex;">
+    <div id="wrapper" style="display: inline-flex; width: 100%;">
         <div id="nav" style="min-width: 15em; display: block;" >
             <div id="list-item">
                 <%out.print(menulist);%>
@@ -160,9 +160,12 @@
                 <a class="nav-list" href="">item2</a>
                 <a class="nav-list" href="">item3</a>
                 <a class="nav-list" href="">item4</a> -->
-                <form  method="post" action="main_edit.jsp" id ="passForm">  
+                <form  method="post" action="main_edit.jsp" id ="passForm1">  
                     <input class="nav-list" name="newfile" id="newfile" type="hidden" placeholder="newname.md">
                     <input type="hidden" name="oldfile" id="oldfile">
+                    <input type="hidden" name="token" id="token"> 
+                    <input type="hidden" id = 'save' name="save">  
+                    <input type="hidden" id="savefilename" name="savefilename">
                 </form>
             </div>
             <div id="tool-bar">    
@@ -176,10 +179,6 @@
         <div  id="vditor" class="vditor "></div>
         <!-- <button onclick="= GetContent()">get content</button> -->
     </div>
-    <form style="max-width=0px; height=0px; visibility: hidden;" method="post" action="main_edit.jsp" id ="passForm">  
-        <input type="hidden" id = 'save' name="save" value="">  
-        <input type="hidden" id="savefilename" name="savefilename">
-    </form>  
     <script src="/dist/index.min.js">
     </script>
     
@@ -256,6 +255,7 @@
         
         save = function() {
             document.getElementById('save').value = GetContent()
+            document.getElementById('token').value = "<%out.print(token);%>"
             alert(GetContent())
             var formObj = document.getElementById('passForm'); 
             formObj.submit(); 
@@ -263,16 +263,19 @@
 
         newfile = function() {
             document.getElementById('newfile').type = 'text';
+            document.getElementById('token').value = "<%out.print(token);%>"
         }
         
         renamefile = function() {
             document.getElementById('newfile').type = 'text';
             document.getElementById('oldfile').value = names_selected;
+            document.getElementById('token').value = "<%out.print(token);%>"
         }
 
         delfile = function() {
             document.getElementById('newfile').type = 'text';
             document.getElementById('oldfile').value = names_selected;
+            document.getElementById('token').value = "<%out.print(token);%>"
         }
 
         select = function(str) {
