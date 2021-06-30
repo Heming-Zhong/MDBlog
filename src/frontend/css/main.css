@@ -1,0 +1,40 @@
+@media (prefers-color-scheme: light) {
+    #nav {
+        background-color: azure;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    #nav {
+        background-color: rgb(26, 26, 27);
+        color: whitesmoke;
+    }
+}
+
+#wrapper {
+    height: 100%;
+    min-height: 100%;
+}
+
+ol{
+    list-style-type:none;/* 去掉li前面的点 */
+}
+
+.nav-list {
+    cursor: auto;
+    text-decoration: none;
+    display: block;
+    border-top: 1px solid #ffffff1a;
+    padding: .5rem 1rem;
+    /* background: url(icon.gif) no-repeat; */
+    box-sizing: border-box;
+}
+
+a.nav-list:hover {
+    background-color: rgb(40, 40, 42);
+}
+
+#tool-bar {
+    position: fixed;
+    bottom: 10%;
+    align-content: center;
+}
