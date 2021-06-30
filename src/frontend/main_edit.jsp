@@ -66,6 +66,29 @@
             refile_result=1;
     }
 
+        
+    String txtMsg = request.getParameter("save");
+    String filename = request.getParameter("pid");
+    
+    // TODO: complete the interaction with backend here
+    List<String> M_list=filemenu();
+    if(filename==null)
+        filename=M_list[0];
+    
+    // 提交文件
+    // 若upfile_result=0，则为默认值，不新建文件；
+    // 若upfile_result=1，则新建失败，提示错误信息；
+    // 若upfile_result=2，则新建成功；
+    int upfile_result=0;
+    String content = get_document_content(filename);
+    if (txtMsg != null) {
+        content = txtMsg;
+        if(handler.update_file(updatefilename,content))
+            upfile_result=2;
+        else
+            upfile_result=1;
+
+    }
     // encode HEX
     // CAUTION: 
     // Whenever you want to pass a java String to a js String, call this code
