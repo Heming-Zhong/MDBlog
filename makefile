@@ -9,3 +9,6 @@ deploy: build
 
 clean: 
 	rm -r bin/*
+
+jsh: build
+	jshell --class-path="./bin:./lib/sqlite-jdbc-3.36.0.jar" prepare.jsh
