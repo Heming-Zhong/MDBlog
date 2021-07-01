@@ -18,6 +18,8 @@ public class UserManager {
     public UserManager(Connection dbConnection, Long timeout) {
         myConnection = dbConnection;
         loginTimeOut = timeout;
+
+        removeTimeout();
     }
     public OperationState register(String userName, String passwd, UserPermission permission) {
         int tmp = 0;
@@ -49,6 +51,25 @@ public class UserManager {
             return new OperationState(State.error, "DB can't add user", "DB can't add user");
         }
         return new OperationState(State.normal, String.format("Success create user %s with ID %d", userName, userKey), "Success");
+    }
+
+    private Integer removeTimeout() {
+        Integer removeLine = 0;
+        String query = "DELETE FROM Login WHERE TimeStamp < ?";
+        Long acceptTimeStamp = System.currentTimeMillis() - loginTimeOut;
+
+        try {
+            PreparedStatement stmt = myConnection.prepareStatement(query);
+            stmt.setLong(1, acceptTimeStamp);
+
+            removeLine = stmt.executeUpdate();
+            
+            stmt.close();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return removeLine;
     }
 
     public OperationState login(String userName, String passwd) {
