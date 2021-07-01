@@ -18,13 +18,15 @@ public class UserManager {
     public UserManager(Connection dbConnection, Long timeout) {
         myConnection = dbConnection;
         loginTimeOut = timeout;
+
+        removeTimeout();
     }
     public OperationState register(String userName, String passwd, UserPermission permission) {
         int tmp = 0;
         if (permission == UserPermission.admin) {
             tmp = 1;
         }
-        String query = String.format("INSERT INTO User (UserName, Passwd, Permission) VALUES (?, ?, ?)");
+        String query = "INSERT INTO User (UserName, Passwd, Permission) VALUES (?, ?, ?)";
         Long userKey = -1L;
 
         try {
@@ -51,9 +53,28 @@ public class UserManager {
         return new OperationState(State.normal, String.format("Success create user %s with ID %d", userName, userKey), "Success");
     }
 
+    private Integer removeTimeout() {
+        Integer removeLine = 0;
+        String query = "DELETE FROM Login WHERE TimeStamp < ?";
+        Long acceptTimeStamp = System.currentTimeMillis() - loginTimeOut;
+
+        try {
+            PreparedStatement stmt = myConnection.prepareStatement(query);
+            stmt.setLong(1, acceptTimeStamp);
+
+            removeLine = stmt.executeUpdate();
+            
+            stmt.close();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        return removeLine;
+    }
+
     public OperationState login(String userName, String passwd) {
         Boolean flag = false;
-        String query = String.format("SELECT * FROM User WHERE UserName = ? and Passwd = ?;");
+        String query = "SELECT * FROM User WHERE UserName = ? and Passwd = ?;";
         Integer permissionInt = 2;
         String permissionStr = "";
         Integer userId = 0;
