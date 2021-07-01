@@ -8,9 +8,9 @@
     
 
     boolean authorized = true;
-    if (token == null) {
-        authorized = false;
-    }
+    //if (token == null) {
+    //    authorized = false;
+    //}
     String txtMsg = request.getParameter("save");
     String filename = request.getParameter("pid");
 
@@ -21,6 +21,7 @@
         handler=new DBHandle(token);
     }
     else handler=new DBHandle();
+    authorized = handler.getAuthority();
     List<String> M_list=handler.filemenu();
     if(filename==null && M_list != null && !M_list.isEmpty())
         filename=M_list.get(0);
@@ -91,9 +92,17 @@
         for(String str: M_list)
         {
             String url1 = "main_edit.jsp?pid=" + str;
-            menulist.append("<div><a class='" + "nav-list" + "'href='" + url1 + "'>" + str + "</a><button onclick='select(" + "'" + str + "'" + ") + '>del</button> </div>");
+            String temp = "<div class='nav-list'><a href='" + url1 + "'>" + str + "</a><button onclick='select(\'" + str + "\')'>del</button> </div>";
+            char[] tempchararr = temp.toCharArray();
+            for (char c : tempchararr) {
+                String charToHex = "\\u" + String.format("%04X", new Integer(c));
+                menulist.append(charToHex);
+            }
+            //menulist.append(temp);
+            //menulist.append("<div class='nav-list'><a href='" + url1 + "'>" + str + "</a><button onclick='select(\'" + str + "\')'>del</button> </div>");
         }
     }
+    String list = menulist.toString();
 %>
 
 <!DOCTYPE HTML>
@@ -156,7 +165,7 @@
     <div id="wrapper" style="display: inline-flex; width: 100%;">
         <div id="nav" style="min-width: 15em; display: block;" >
             <div id="list-item">
-                <%out.print(menulist);%>
+                <%-- "<%out.print(list);%>" --%>
                 <!-- <a class="nav-list" href="main_edit.jsp?save=hello">item1</a>
                 <a class="nav-list" href="">item2</a>
                 <a class="nav-list" href="">item3</a>
@@ -184,8 +193,13 @@
     </script>
     
     <script>
+        var templist = "<%out.print(list);%>"
+        document.getElementById("list-item").innerHTML = templist;
         var token = "<%out.print(token);%>"
+        var newfile_test = "<%out.print(newfilename);%>"
         alert(token)
+        alert("<%out.print(list);%>")
+        alert(newfile_test)
         var authorization = "<%out.print(authorized);%>"
         if (authorization == "false") {
             alert("尚未登录!");

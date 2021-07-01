@@ -42,12 +42,14 @@ public class DBHandle {
 
     /***************************************/
     public DBHandle(){
+        System.out.println("debug_info: default handler");
         admin = false;
         logined = false;
         manager = new DBManager(new DBConfig());
         fileContent = new HashMap<String,String>();
     }
     public DBHandle(String user, String passwd){
+        System.out.println("debug_info: input handler");
         admin = false;
         logined = false;
         manager = new DBManager(new DBConfig());
@@ -55,6 +57,7 @@ public class DBHandle {
         token = login(user, passwd);
     }
     public DBHandle(String token){
+        System.out.println("debug_info: token handler");
         admin = false;
         logined = false;
         manager = new DBManager(new DBConfig());
@@ -63,6 +66,11 @@ public class DBHandle {
         if(state.retState == State.normal){
             logined = true;
             admin = state.retList.get(1).equals("admin");
+            System.out.println("debug_info: " + token);
+        }
+        else {
+            System.out.println("debug_error: " + state.msg);
+            
         }
     }
 
