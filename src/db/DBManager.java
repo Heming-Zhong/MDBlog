@@ -28,7 +28,7 @@ public class DBManager {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            DBConnection = DriverManager.getConnection("jdbc:sqlite:" + config.sqliteFile);
+            DBConnection = DriverManager.getConnection("jdbc:sqlite::resource:" + config.sqliteFile);
         } catch (Exception e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             // System.exit(0);
