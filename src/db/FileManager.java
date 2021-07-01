@@ -38,7 +38,7 @@ public class FileManager {
             permissionInt = 1;
         }
 
-        String query = String.format("INSERT INTO File (FileName, FilePath, FileType, Permission) VALUES (?, ?, ?, ?)");
+        String query = "INSERT INTO File (FileName, FilePath, FileType, Permission) VALUES (?, ?, ?, ?)";
         Long fileKey = -1L;
         String filePath = pathPrefix + fileName;
         try {
@@ -69,7 +69,7 @@ public class FileManager {
     public OperationState delFile(String fileName) {
         int affectLine = 0;
 
-        String query = String.format("DELETE from File WHERE FileName = ?");
+        String query = "DELETE from File WHERE FileName = ?";
 
         try {
             PreparedStatement stmt = myConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -93,7 +93,7 @@ public class FileManager {
     public OperationState renameFile(String oldName, String newName) {
         int affectLine = 0;
 
-        String query = String.format("UPDATE File set FileName = ? WHERE FileName = ?");
+        String query = "UPDATE File set FileName = ? WHERE FileName = ?";
 
         try {
             PreparedStatement stmt = myConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -117,7 +117,7 @@ public class FileManager {
 
     public OperationState listFile() {
         Boolean flag = false;
-        String query = String.format("SELECT FileName FROM File");
+        String query = "SELECT FileName FROM File";
         List<String> ret = new ArrayList<String>();
 
         try {
@@ -155,7 +155,7 @@ public class FileManager {
         }
 
         Boolean flag = false;
-        String query = String.format("SELECT FileName FROM File WHERE FileType = ?");
+        String query = "SELECT FileName FROM File WHERE FileType = ?";
         List<String> ret = new ArrayList<String>();
 
         try {
@@ -185,7 +185,7 @@ public class FileManager {
 
     public OperationState getFile(String fileName) {
         Boolean flag = false;
-        String query = String.format("SELECT FilePath FROM File WHERE FileName = ?");
+        String query = "SELECT FilePath FROM File WHERE FileName = ?";
         String ret = "";
 
         try {
