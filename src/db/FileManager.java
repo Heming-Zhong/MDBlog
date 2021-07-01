@@ -4,6 +4,7 @@ import db.UserManager.UserPermission;
 import db.OperationState.State;
 import java.sql.*;
 import java.util.*;
+import java.io.File;
 
 public class FileManager {
     public enum FileType {
@@ -16,6 +17,24 @@ public class FileManager {
 
     public FileManager(Connection dbConnection) {
         myConnection = dbConnection;
+        pathPrefix = detectPrefix();
+    }
+
+    public String getPrefix() {
+        // For Debug! Delete when release!
+        return pathPrefix;
+    }
+    private String detectPrefix() {
+        String prefix = this.getClass().getResource("/").getPath();
+        File tmp = new File(prefix);
+        prefix = tmp.getParent() + "/resources/";
+
+        tmp = new File(prefix);
+        if (!tmp.exists()) {
+            tmp.mkdirs();
+        }
+
+        return prefix;
     }
 
     // TODO: Prove File Table
