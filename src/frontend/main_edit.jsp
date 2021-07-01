@@ -5,6 +5,7 @@
     // just for test
     request.setCharacterEncoding("utf-8"); 
     String token = request.getParameter("token");
+    
 
     boolean authorized = true;
     if (token == null) {
@@ -183,6 +184,8 @@
     </script>
     
     <script>
+        var token = "<%out.print(token);%>"
+        alert(token)
         var authorization = "<%out.print(authorized);%>"
         if (authorization == "false") {
             alert("尚未登录!");

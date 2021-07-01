@@ -206,7 +206,7 @@ public class DBHandle {
             fileContent.put(filename, "");
             return true;
         }
-        return true;
+        return false;
     }
     
     public boolean delfile(String filename){
