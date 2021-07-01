@@ -28,7 +28,11 @@ public class FileManager {
         String prefix = this.getClass().getResource("/").getPath();
         File tmp = new File(prefix);
         prefix = tmp.getParent() + "/resources/";
-
+        try {
+            prefix = java.net.URLDecoder.decode(prefix,"utf-8"); 
+        } catch (Exception e){
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
         tmp = new File(prefix);
         if (!tmp.exists()) {
             tmp.mkdirs();
