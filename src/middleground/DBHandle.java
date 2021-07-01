@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.*;
 
 
-import java.net.URLEncoder;
+// import java.net.URLEncoder;
 import java.nio.charset.Charset;
 // import javax.servlet.http.HttpServletResponse;
 import java.net.URL;
@@ -22,7 +22,7 @@ import java.net.URL;
 import db.*;
 import db.OperationState.State;
 import db.FileManager.FileType;
-import db.UserManager.UserPermission;
+// import db.UserManager.UserPermission;
 
 public class DBHandle {
     
