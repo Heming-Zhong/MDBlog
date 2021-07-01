@@ -24,7 +24,7 @@ public class UserManager {
         if (permission == UserPermission.admin) {
             tmp = 1;
         }
-        String query = String.format("INSERT INTO User (UserName, Passwd, Permission) VALUES (?, ?, ?)");
+        String query = "INSERT INTO User (UserName, Passwd, Permission) VALUES (?, ?, ?)";
         Long userKey = -1L;
 
         try {
@@ -53,7 +53,7 @@ public class UserManager {
 
     public OperationState login(String userName, String passwd) {
         Boolean flag = false;
-        String query = String.format("SELECT * FROM User WHERE UserName = ? and Passwd = ?;");
+        String query = "SELECT * FROM User WHERE UserName = ? and Passwd = ?;";
         Integer permissionInt = 2;
         String permissionStr = "";
         Integer userId = 0;
