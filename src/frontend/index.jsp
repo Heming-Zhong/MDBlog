@@ -54,7 +54,7 @@
         }
         var redirect = "<%out.print(location);%>"
         if (redirect == "main_preview.jsp" || redirect == "main_edit.jsp") {
-            window.location = redirect + "?token=" + "<%out.print(loginres);%>;"
+            window.location = redirect + "?token=" + "<%out.print(loginres);%>"
         }
         // debug to see the submission of user info
         alert("<%out.print(username);%>");
