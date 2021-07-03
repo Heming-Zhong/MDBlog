@@ -33,7 +33,7 @@ public class DBHandle {
     private DBManager manager;
     
     // filename -> content
-    private static Map<String, String> fileContent;
+    private Map<String, String> fileContent;
 
     // (boolean) tag of login
     private boolean logined;
@@ -149,10 +149,9 @@ public class DBHandle {
         if(!logined || !admin)
             return false;
         // ERROR: fileContent is not persistent
-        // System.out.println("debug0");
-        if(!fileContent.containsKey(filename))
-            return false;
-        // System.out.println("debug1");
+
+            
+        
         OperationState state = manager.getFile(filename);
         if(state.retState!=State.normal)
         return false;
