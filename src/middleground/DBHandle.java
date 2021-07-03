@@ -33,7 +33,7 @@ public class DBHandle {
     private DBManager manager;
     
     // filename -> content
-    private Map<String, String> fileContent;
+    private static Map<String, String> fileContent;
 
     // (boolean) tag of login
     private boolean logined;
@@ -46,22 +46,26 @@ public class DBHandle {
         admin = false;
         logined = false;
         manager = new DBManager(new DBConfig());
-        fileContent = new HashMap<String,String>();
+        if(fileContent == null)
+            fileContent = new HashMap<String,String>();
+        
     }
     public DBHandle(String user, String passwd){
         System.out.println("debug_info: input handler");
         admin = false;
         logined = false;
         manager = new DBManager(new DBConfig());
-        fileContent = new HashMap<String,String>();
         token = login(user, passwd);
+        if(fileContent == null)
+            fileContent = new HashMap<String,String>();
     }
     public DBHandle(String token){
         System.out.println("debug_info: token handler");
         admin = false;
         logined = false;
         manager = new DBManager(new DBConfig());
-        fileContent = new HashMap<String,String>();
+        if(fileContent == null)
+            fileContent = new HashMap<String,String>();
         OperationState state = manager.login(token);
         if(state.retState == State.normal){
             logined = true;
@@ -70,7 +74,6 @@ public class DBHandle {
         }
         else {
             System.out.println("debug_error: " + state.msg);
-            
         }
     }
 
@@ -88,7 +91,6 @@ public class DBHandle {
             admin = state.retList.get(1).equals("admin");
             return state.retList.get(0);
         }
-        
         return null;
     }
 
@@ -118,7 +120,6 @@ public class DBHandle {
     // 获取文件内容
     public String get_document_content(String filename){
         OperationState state = manager.getFile(filename);
-        // String url = buffer.get();
 
         if(fileContent.containsKey(filename)){
             return fileContent.get(filename);
@@ -145,7 +146,6 @@ public class DBHandle {
     }
                                 
     public boolean update_file(String filename, String newcontent){
-        // String oldcontent = fileContent
         if(!logined || !admin)
             return false;
         // ERROR: fileContent is not persistent
@@ -176,7 +176,6 @@ public class DBHandle {
     
     // 这边需要数据库提供修改文件名的功能renameFile(String url, String newname)
     public boolean rename(String oldname, String newname){
-        // String filename = FilenameUtils.getName(url.getPath());
         if(!logined || !admin)
             return false;
         if (newname.equals(oldname))
@@ -206,7 +205,6 @@ public class DBHandle {
                 outFile = new FileOutputStream(url);    
                 outFile.close();
             } catch (Exception e) {
-                // throw new Exception()
                 return false;
             }
             // outFile.write("");
