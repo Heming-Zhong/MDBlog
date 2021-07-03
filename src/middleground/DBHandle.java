@@ -13,9 +13,9 @@ import java.util.*;
 
 
 // import java.net.URLEncoder;
-import java.nio.charset.Charset;
+// import java.nio.charset.Charset;
 // import javax.servlet.http.HttpServletResponse;
-import java.net.URL;
+
 // import java.net;
 // import org.apache.commons.io.filenameUtils;
 // import org.apache.commons.lang3.StringUtils;
@@ -127,20 +127,17 @@ public class DBHandle {
 
         String content = "";
         if(state.retState==State.normal){
-            String url = state.ret;  
-            try (InputStream is = new URL(url).openStream();){
-                
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            String url = state.ret;
+            try (InputStream inFile = new FileInputStream(url);){
                 StringBuilder sb = new StringBuilder();
                 int cp;
-                while ((cp = rd.read()) != -1) {
+                while ((cp = inFile.read()) != -1) {
                     sb.append((char) cp);
                 }
                 content = sb.toString();
                 
             } catch(Exception e) { }
         }
-
 
         return content;
     }
@@ -150,8 +147,6 @@ public class DBHandle {
             return false;
         // ERROR: fileContent is not persistent
 
-            
-        
         OperationState state = manager.getFile(filename);
         if(state.retState!=State.normal)
         return false;
