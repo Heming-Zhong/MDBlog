@@ -148,7 +148,7 @@ public class DBHandle {
         // String oldcontent = fileContent
         if(!logined || !admin)
             return false;
-        
+        // ERROR: fileContent is not persistent
         if(!fileContent.containsKey(filename))
             return false;
         

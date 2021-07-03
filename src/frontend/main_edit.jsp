@@ -8,9 +8,6 @@
     
 
     boolean authorized = true;
-    //if (token == null) {
-    //    authorized = false;
-    //}
     String txtMsg = request.getParameter("save");
     String filename = request.getParameter("pid");
 
@@ -23,9 +20,14 @@
     else handler=new DBHandle();
     authorized = handler.getAuthority();
     List<String> M_list=handler.filemenu();
-    if(filename==null && M_list != null && !M_list.isEmpty())
-        filename=M_list.get(0);
+    if(filename == null && M_list != null && !M_list.isEmpty())
+        filename = M_list.get(0);
     
+    // 更新文件
+    boolean updatefile_result = false;
+    if (txtMsg != null && filename != null && !filename.isEmpty()) {
+        updatefile_result = handler.update_file(filename, txtMsg);
+    }
     String content = handler.get_document_content(filename);
     if (txtMsg != null) {
         content = txtMsg;
@@ -37,7 +39,7 @@
     // 若newfile_result=1，则新建失败，提示错误信息；
     // 若newfile_result=2，则新建成功；
     int newfile_result=0;   
-    if(newfilename!=null)
+    if(newfilename!=null && !newfilename.isEmpty())
     {
         if(handler.newfile(newfilename))
             newfile_result=2;
@@ -51,7 +53,7 @@
     // 若deletefile_result=1，则删除失败，提示错误信息；
     // 若deletefile_result=2，则删除成功；
     int deletefile_result=0;   
-    if(deletefilename!=null)
+    if(deletefilename!=null && !deletefilename.isEmpty())
     {
         if(handler.delfile(deletefilename))
             deletefile_result=2;
@@ -66,7 +68,7 @@
     // 若refile_result=1，则重命名失败，提示错误信息；
     // 若refile_result=2，则重命名成功；
     int refile_result=0;   
-    if(refilename!=null)
+    if(refilename!=null && !refilename.isEmpty())
     {
         if(handler.rename(oldfilename, refilename))
             refile_result=2;
@@ -91,14 +93,16 @@
     if (M_list != null && !M_list.isEmpty()) {
         for(String str: M_list)
         {
-            String url1 = "main_edit.jsp?pid=" + str;
-            String temp = "<div class='nav-list'><a href='" + url1 + "'>" + str + "</a><button onclick='select(\'" + str + "\')'>del</button> </div>";
-            char[] tempchararr = temp.toCharArray();
-            for (char c : tempchararr) {
-                String charToHex = "\\u" + String.format("%04X", new Integer(c));
-                menulist.append(charToHex);
-            }
-            //menulist.append(temp);
+            //String url1 = "main_edit.jsp?pid=" + str + ";?token=" + token;
+            //String url1 = "javascript:open(event)";
+            String url1 = "open(&apos;"+ str +"&apos;);";
+            String temp = "<a oncontextmenu='showMenu(event)' class='nav-list' href='javascript:" + url1 + "' >" + str + "</a>";
+            //char[] tempchararr = temp.toCharArray();
+            //for (char c : tempchararr) {
+            //    String charToHex = "\\u" + String.format("%04X", new Integer(c));
+            //    menulist.append(charToHex);
+            //}
+            menulist.append(temp);
             //menulist.append("<div class='nav-list'><a href='" + url1 + "'>" + str + "</a><button onclick='select(\'" + str + "\')'>del</button> </div>");
         }
     }
@@ -118,63 +122,26 @@
     <link rel="stylesheet" href="/css/purple.user.css" />
     <title><%=Title%></title>
 </head>
-<style>
-    body {
-        min-width: 100%;
-        overflow: hidden;
-        -webkit-text-size-adjust: none;
-    }
-    .vditor-reset {
-        font-size: 16pt;
-        -webkit-font-smoothing: antialiased;
-        font-family: "SFMono-Medium", "FiraCode-Retina", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        padding: 10px 37px !important;
-    }
-    .vditor {
-        --textarea-background-color: #fff;
-        border-radius: 0px;
-        width: 100% !important;
-    }
-    .vditor--dark {
-        --panel-background-color: #121213;
-        --textarea-background-color: #121213;
-        --toolbar-background-color: #171a1d;
-    }
-    .vditor-outline {
-        width: 27%;
-    }
-    .vditor--fullscreen {
-        border: 0;
-    }
-    .vditor-reset h1 {
-        border-bottom: 0px !important;
-    }
-    .vditor-reset ol, .vditor-reset ul {
-        padding-left: 2.4em; 
-    }
-    .vditor-ir .vditor-reset>h2:before {
-        content: "H2";
-        margin-left: -48px;
-    }
-    .hljs::-webkit-scrollbar {
-        display: none;
-    }
-</style>
-
 <body>
+    <div class="contextmenu" id="context">
+        <ul>
+            <li><a href="javascript:renamefile();">重命名</a> </li>
+            <li><a href="javascript:delfile();">删除</a></li>
+        </ul>
+    </div>
     <div id="wrapper" style="display: inline-flex; width: 100%;">
         <div id="nav" style="min-width: 15em; display: block;" >
             <div id="list-item">
-                <%-- "<%out.print(list);%>" --%>
-                <!-- <a class="nav-list" href="main_edit.jsp?save=hello">item1</a>
-                <a class="nav-list" href="">item2</a>
-                <a class="nav-list" href="">item3</a>
-                <a class="nav-list" href="">item4</a> -->
-                <form  method="post" action="main_edit.jsp" id ="passForm1">  
-                    <input class="nav-list" name="newfile" id="newfile" type="hidden" placeholder="newname.md">
+                <%out.print(list);%>
+                <%-- <a class="nav-list" href="main_edit.jsp?save=hello">item1</a> --%>
+                <form  method="get" action="main_edit.jsp" id ="passForm">  
+                    <input class="nav-list" name="newfile" id="newfile" type="hidden" placeholder="newname.md" >
+                    <input class="nav-list" name="renamefile" id="renamefile" type="hidden" placeholder="newname.md">
+                    <input type="hidden" name="deletefile" id="deletefile">
                     <input type="hidden" name="oldfile" id="oldfile">
                     <input type="hidden" name="token" id="token"> 
                     <input type="hidden" id = 'save' name="save">  
+                    <input type="hidden" id = 'pid' name="pid">  
                     <input type="hidden" id="savefilename" name="savefilename">
                 </form>
             </div>
@@ -194,9 +161,8 @@
     
     <script>
         var templist = "<%out.print(list);%>"
-        document.getElementById("list-item").innerHTML = templist;
         var token = "<%out.print(token);%>"
-        var newfile_test = "<%out.print(newfilename);%>"
+        var newfile_test = "<%out.print(filename);%>"
         alert(token)
         alert("<%out.print(list);%>")
         alert(newfile_test)
@@ -205,7 +171,7 @@
             alert("尚未登录!");
             window.location = "index.jsp";
         }
-        alert("<%out.print(newfile_result);%>")
+        alert("<%out.print(updatefile_result);%>")
         var names_selected = null
         var edited = false
         var editor = new Vditor('vditor', {
@@ -272,9 +238,19 @@
         
         save = function() {
             document.getElementById('save').value = GetContent()
+            document.getElementById('pid').value = "<%out.print(filename);%>"
             document.getElementById('token').value = "<%out.print(token);%>"
             alert(GetContent())
             var formObj = document.getElementById('passForm'); 
+            formObj.submit(); 
+        }
+
+        open = function(filename) {
+            alert(filename)
+            document.getElementById('token').value = "<%out.print(token);%>"
+            document.getElementById('pid').value = filename
+            var formObj = document.getElementById('passForm');
+            alert(document.getElementById("newfile").value) 
             formObj.submit(); 
         }
 
@@ -284,14 +260,13 @@
         }
         
         renamefile = function() {
-            document.getElementById('newfile').type = 'text';
+            document.getElementById('renamefile').type = 'text';
             document.getElementById('oldfile').value = names_selected;
             document.getElementById('token').value = "<%out.print(token);%>"
         }
 
         delfile = function() {
-            document.getElementById('newfile').type = 'text';
-            document.getElementById('oldfile').value = names_selected;
+            document.getElementById('deletefile').value = names_selected;
             document.getElementById('token').value = "<%out.print(token);%>"
         }
 
@@ -307,6 +282,41 @@
             editor.setValue(content)
             // 当且仅当以View的数据为准时会SetContent，所以需要把edited设为false
             edited = false
+        }
+
+        function showMenu(env) {
+            env.preventDefault();
+            //env 表示event事件
+            // 兼容event事件写法
+            var e = env || window.event;
+            names_selected = env.target.innerHTML
+            alert(names_selected)
+
+            // 获取菜单，让菜单显示出来
+            var context = document.getElementById("context");
+            context.style.display = "block";
+
+            //  让菜单随着鼠标的移动而移动
+            //  获取鼠标的坐标
+            var x = e.clientX;
+            var y = e.clientY;
+
+            //  调整宽度和高度
+            context.style.left = x - 200 + "px" //Math.min(w-202,x)+"px";
+            context.style.top = y + "px" //Math.min(h-230,y)+"px";
+
+            // return false可以关闭系统默认菜单
+            return false;
+        };
+        // 当鼠标点击后关闭右键菜单
+        document.onclick = function() {
+            closeMenu()
+
+        };
+
+        function closeMenu() {
+            var contextmenu = document.getElementById("context");
+            contextmenu.style.display = "none";
         }
 
         function handleChange(mediaQueryListEvent) {
