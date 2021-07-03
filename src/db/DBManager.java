@@ -149,7 +149,7 @@ public class DBManager {
             return new OperationState(State.error, "Login First", "Login First");
         }
         if (myPermission == UserPermission.admin) {
-            return renameFile(oldName, newName);
+            return fileDBM.renameFile(oldName, newName);
         } else {
             return new OperationState(State.error, "You can't rename", "You can't rename file");
         }
