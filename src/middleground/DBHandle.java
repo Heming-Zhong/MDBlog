@@ -149,12 +149,14 @@ public class DBHandle {
         if(!logined || !admin)
             return false;
         // ERROR: fileContent is not persistent
+        // System.out.println("debug0");
         if(!fileContent.containsKey(filename))
             return false;
-        
+        // System.out.println("debug1");
         OperationState state = manager.getFile(filename);
         if(state.retState!=State.normal)
-            return false;
+        return false;
+        // System.out.println("debug2");
         
         try {
             String url = state.ret;
