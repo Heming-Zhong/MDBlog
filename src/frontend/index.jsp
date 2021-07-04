@@ -33,7 +33,7 @@
     <meta charset="UTF-8">
     <title>登录</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
 </head>
 
 <body>
@@ -57,8 +57,6 @@
             window.location = redirect + "?token=" + "<%out.print(loginres);%>"
         }
         // debug to see the submission of user info
-        alert("<%out.print(username);%>");
-        alert("<%out.print(passwd);%>");
     </script>
 </body>
 

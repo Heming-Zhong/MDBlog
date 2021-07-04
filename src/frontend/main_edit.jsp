@@ -10,6 +10,9 @@
     boolean authorized = true;
     String txtMsg = request.getParameter("save");
     String filename = request.getParameter("pid");
+    String isaving = request.getParameter("isaving");
+    if (isaving == null) 
+        isaving = "false";
 
     // TODO: complete the interaction with backend here
     // List<String> M_list = Arrays.asList("name1", "name2", "name3");
@@ -25,13 +28,13 @@
     
     // 更新文件
     boolean updatefile_result = false;
-    if (txtMsg != null && filename != null && !filename.isEmpty()) {
+    if (isaving.equals("true") && txtMsg != null && filename != null && !filename.isEmpty()) {
         updatefile_result = handler.update_file(filename, txtMsg);
     }
     String content = handler.get_document_content(filename);
-    if (txtMsg != null) {
-        content = txtMsg;
-    }
+    //if (txtMsg != null) {
+    //    content = txtMsg;
+    //}
 
     // 新建文件
     String newfilename = request.getParameter("newfile");
@@ -76,6 +79,8 @@
             refile_result=1;
     }
 
+    M_list=handler.filemenu();
+
     // encode HEX
     // CAUTION: 
     // Whenever you want to pass a java String to a js String, call this code
@@ -93,17 +98,9 @@
     if (M_list != null && !M_list.isEmpty()) {
         for(String str: M_list)
         {
-            //String url1 = "main_edit.jsp?pid=" + str + ";?token=" + token;
-            //String url1 = "javascript:open(event)";
             String url1 = "open(&apos;"+ str +"&apos;);";
             String temp = "<a oncontextmenu='showMenu(event)' class='nav-list' href='javascript:" + url1 + "' >" + str + "</a>";
-            //char[] tempchararr = temp.toCharArray();
-            //for (char c : tempchararr) {
-            //    String charToHex = "\\u" + String.format("%04X", new Integer(c));
-            //    menulist.append(charToHex);
-            //}
             menulist.append(temp);
-            //menulist.append("<div class='nav-list'><a href='" + url1 + "'>" + str + "</a><button onclick='select(\'" + str + "\')'>del</button> </div>");
         }
     }
     String list = menulist.toString();
@@ -116,10 +113,10 @@
     <meta charset="utf-8" />
     <%-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" /> --%>
     <!-- ⚠️生产环境请指定版本号，如 https://cdn.jsdelivr.net/npm/vditor@x.x.x/dist... -->
-    <link rel="stylesheet" href="/css/purple.css" />
-    <link rel="stylesheet" href="/dist/index.css" />
-    <link rel="stylesheet" href="/css/main.css" />
-    <link rel="stylesheet" href="/css/purple.user.css" />
+    <link rel="stylesheet" href="./css/purple.css" />
+    <link rel="stylesheet" href="./dist/index.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/purple.user.css" />
     <title><%=Title%></title>
 </head>
 <body>
@@ -142,7 +139,7 @@
                     <input type="hidden" name="token" id="token"> 
                     <input type="hidden" id = 'save' name="save">  
                     <input type="hidden" id = 'pid' name="pid">  
-                    <input type="hidden" id="savefilename" name="savefilename">
+                    <input type="hidden" id="isaving" name="isaving">
                 </form>
             </div>
             <div id="tool-bar">    
@@ -154,24 +151,18 @@
         </div>
         <!--  vditor--fullscreen -->
         <div  id="vditor" class="vditor "></div>
-        <!-- <button onclick="= GetContent()">get content</button> -->
     </div>
-    <script src="/dist/index.min.js">
+    <script src="./dist/index.min.js">
     </script>
     
     <script>
         var templist = "<%out.print(list);%>"
         var token = "<%out.print(token);%>"
-        var newfile_test = "<%out.print(filename);%>"
-        alert(token)
-        alert("<%out.print(list);%>")
-        alert(newfile_test)
         var authorization = "<%out.print(authorized);%>"
         if (authorization == "false") {
             alert("尚未登录!");
             window.location = "index.jsp";
         }
-        alert("<%out.print(updatefile_result);%>")
         var names_selected = null
         var edited = false
         var editor = new Vditor('vditor', {
@@ -213,11 +204,7 @@
                 }
             },
             after: function() {
-                // TODO: assign the content of first doc got from java to the editor
                 var test = "<%out.print(content);%>";
-                console.log(test)
-                // var test = "${content}";
-                // test = getStringFromHex(test);
                 SetContent(test);
             }
         })
@@ -240,17 +227,15 @@
             document.getElementById('save').value = GetContent()
             document.getElementById('pid').value = "<%out.print(filename);%>"
             document.getElementById('token').value = "<%out.print(token);%>"
-            alert(GetContent())
+            document.getElementById('isaving').value = "true"
             var formObj = document.getElementById('passForm'); 
             formObj.submit(); 
         }
 
         open = function(filename) {
-            alert(filename)
             document.getElementById('token').value = "<%out.print(token);%>"
             document.getElementById('pid').value = filename
             var formObj = document.getElementById('passForm');
-            alert(document.getElementById("newfile").value) 
             formObj.submit(); 
         }
 
@@ -268,6 +253,8 @@
         delfile = function() {
             document.getElementById('deletefile').value = names_selected;
             document.getElementById('token').value = "<%out.print(token);%>"
+            var formObj = document.getElementById('passForm');
+            formObj.submit(); 
         }
 
         select = function(str) {
@@ -280,7 +267,6 @@
 
         SetContent = function(content) {
             editor.setValue(content)
-            // 当且仅当以View的数据为准时会SetContent，所以需要把edited设为false
             edited = false
         }
 
