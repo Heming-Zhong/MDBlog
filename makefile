@@ -1,7 +1,7 @@
 
 build:
-	cd src; javac db/*.java --class-path ../lib/ -d ../bin/
-	cd src; javac middleground/*.java --class-path ../bin/ -d ../bin/
+	cd src; javac db/*.java -classpath ../lib/ -d ../bin/
+	cd src; javac middleground/*.java -classpath ../bin/ -d ../bin/
 
 deploy: build
 	cp bin/db/* ~/apache-tomcat/webapps/ROOT/WEB-INF/classes/db/
